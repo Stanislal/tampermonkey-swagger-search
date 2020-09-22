@@ -1,6 +1,6 @@
 (function () {
 
-    addGlobalStyle("#customModal{overflow-x:hidden;top:50px;background:#fff;z-index:99;box-shadow:0 1px 2px 0 rgba(0,0,0,.15); max-height: 300px;position:absolute;width:400px;}#customSearchTerm:focus{box-shadow:0 0;border:0 none;outline:0}#customSearchTerm{width:100%}.download-url-wrapper{order:2}.topbar-wrapper .link{min-width:150px}#searchContainer{width:400px;top:0;margin:auto;order:1}#customModal a{text-decoration:none;max-width:unset;color:#55a;font-weight:500; font-size: 20px;}li.list-group-item{padding:5px}li.list-group-item:hover{background:#89bf04b0}.list-group{display:flex;flex-direction:column;padding-left:0;margin:0}");
+    addGlobalStyle("#customModal{overflow-x:hidden;top:50px;background:#fff;z-index:99;box-shadow:0 1px 2px 0 rgba(0,0,0,.15); max-height: 300px;position:absolute;width:400px;}#customSearchTerm:focus{box-shadow:0 0;border:0 none;outline:0}#customSearchTerm{width:100%}.download-url-wrapper{order:2}.topbar-wrapper .link{min-width:150px}#searchContainer{width:400px;top:0;margin:auto;order:1}#customModal a{text-decoration:none;max-width:unset;color:#55a;font-weight:500; font-size: 20px;}li.list-group-item{padding:5px}li.list-group-item.no-hover:hover{background:unset;}li.list-group-item:hover{background:#89bf04b0}.list-group{display:flex;flex-direction:column;padding-left:0;margin:0}");
 
     function addGlobalStyle(css) {
         var head, style;
@@ -28,12 +28,16 @@
 
     function search(param) {
         var filtredSwaggerList = swaggerList.filter(swagger => swagger.searchName.search(param.toLowerCase()) > -1);
-        console.log(filtredSwaggerList);
+        //console.log(filtredSwaggerList);
         $("#customModalId").html("");
 
-        filtredSwaggerList.forEach(swagger => {
-            $("#customModalId").append("<li class=\"list-group-item\"><a href=\"" + swagger.redirectURL + "\">" + swagger.name + "</a></li>");
-        });
+        if (filtredSwaggerList.length == 0) {
+            $("#customModalId").html("<li class=\"list-group-item no-hover\">Sem resultados para \""+param+"\"</li>");
+        } else {
+            filtredSwaggerList.forEach(swagger => {
+                $("#customModalId").append("<li class=\"list-group-item\"><a href=\"" + swagger.redirectURL + "\">" + swagger.name + "</a></li>");
+            });
+        }
 
     }
 
