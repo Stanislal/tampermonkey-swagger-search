@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Swagger Search
-// @version      1.01
+// @version      1.02
 // @description  Filter Swagger by name.
 // @author       Icaro Batistella Baruffi  <icru3@hotmail.com>
 // @match        http://swaggerui.pontoslivelo.com.br/*
