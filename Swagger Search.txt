@@ -51,62 +51,81 @@ function addGlobalStyle(css) {
 
     }
 
+    function createHTML(){
+        $().add("<div><\div>")
+            .attr("id", "searchContainer")
+            .prependTo(".topbar-wrapper");
+
+        $().add("<input type='text' value='' />")
+            .attr("id", "customSearchTerm")
+            .attr("name", "customSearchTerm")
+            .attr("placeholder", "Buscar swagger")
+            .prependTo("#searchContainer");
+
+
+        $("#searchContainer").append("<div id=\"customModal\"></div>");
+
+        $("#customModal").append("<ul id=\"customModalId\" class=\"list-group\"></ul>");
+        $("#customModal").css({"max-height": "300px"});
+        $("#customModalId").css({
+            'display': 'flex',
+            'flex-direction': 'column',
+            'padding-left': '0',
+            'margin':'0'
+        });
+    }
+
+    function createBinds() {
+
+        $(".swagger-ui").on("click", event => {
+            try {
+                $("#customModalId").html("");
+            }catch (e){
+                console.log(e);
+            }
+        });
+
+        $(window).on("resize", event => {
+            try {
+                $("#customModal").css("width", $("#searchContainer").width() +"px");
+            }catch(e){
+                console.log(e);
+            }
+        });
+
+        $("#customSearchTerm").on('keyup', event => {
+
+            if (event.target.value && event.target.value.length > 2)
+                search(event.target.value);
+            else
+                $("#customModalId").html("");
+        });
+
+    }
+
     $(document).ready(function () {
+        console.log("Swagger Search loaded...");
 
-        setTimeout( () => {
+        var intervalEvent = setInterval(onLoad, 350);
 
-            var defaultSwaggerList = $('#select').find('option');
+        function onLoad() {
+            try {
+                if ($('#select').find('option').length > 0){
+                    var defaultSwaggerList = $('#select').find('option');
+                    $.each(defaultSwaggerList, (idx, elm) => {
+                        swaggerList.push(new SwaggerDTO(elm.index, elm.label, elm.value));
+                    });
 
-            $.each(defaultSwaggerList, (idx, elm) => {
-                swaggerList.push(new SwaggerDTO(elm.index, elm.label, elm.value));
-            });
-
-            $().add("<div><\div>")
-                .attr("id", "searchContainer")
-                .prependTo(".topbar-wrapper");
-
-            $().add("<input type='text' value='' />")
-                .attr("id", "customSearchTerm")
-                .attr("name", "customSearchTerm")
-                .attr("placeholder", "Buscar swagger")
-                .prependTo("#searchContainer");
-
-
-            $("#searchContainer").append("<div id=\"customModal\"></div>");
-
-            $("#customModal").append("<ul id=\"customModalId\" class=\"list-group\"></ul>");
-            $("#customModal").css({"max-height": "300px"});
-            $("#customModalId").css({
-                'display': 'flex',
-                'flex-direction': 'column',
-                'padding-left': '0',
-                'margin':'0'
-            });
-
-            $(".swagger-ui").on("click", event => {
-                try {
-                    $("#customModalId").html("");
-                }catch (e){
-                    console.log(e);
+                    createHTML();
+                    createBinds();
+                    clearInterval(intervalEvent);
                 }
-            });
 
-            $(window).on("resize", event => {
-                try {
-                    $("#customModal").css("width", $("#searchContainer").width() +"px");
-                }catch(e){
-                    console.log(e);
-                }
-            });
+            }catch(e){
+                console.log(e);
+            }
 
-            $("#customSearchTerm").on('keyup', event => {
-
-                if (event.target.value && event.target.value.length > 2)
-                    search(event.target.value);
-                else
-                    $("#customModalId").html("");
-            });
-        },1);
+        }
 
     })
 
